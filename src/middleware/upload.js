@@ -39,7 +39,7 @@ const multerUpload = multer({
 
 // untuk middleware
 const upload = (req,res,next)=>{
-    const multerSingle = multerUpload.single ('gambar')
+    const multerSingle = multerUpload.single ('image')
     multerSingle(req,res, (err)=>{
         if (err){
             res.json({
