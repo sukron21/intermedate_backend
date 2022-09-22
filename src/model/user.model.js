@@ -91,7 +91,7 @@ const userModel = {
               }
               resolve(res)
             }
-      )
+          })
     })
   },
   delete: (id) => {
