@@ -35,9 +35,9 @@ const recipeController = {
   },
   insert: (req, res) => {
     // eslint-disable-next-line camelcase
-    const {nama_recipe, ingredients,tanggal_dibuat } = req.body
+    const {nama_recipe, ingredients,tanggal_dibuat,image } = req.body
     recipeModel
-      .store( nama_recipe, ingredients,tanggal_dibuat)
+      .store( nama_recipe, ingredients,tanggal_dibuat,image)
       .then((result) => {
         res.json('Account added successfully')
       })
