@@ -73,7 +73,7 @@ const userModel = {
       })
     })
   },  
-  updateAccount: ({id,username, email,phone,password,image}) => {
+  updateAccount: ({id,username, email,phone,password,level,image}) => {
     return new Promise((resolve, reject) => {
       // UPDATE users SET
         
@@ -84,9 +84,7 @@ const userModel = {
       // phone = COALESCE('${phone}', phone),
       // password = COALESCE('${password}', password),
       db.query(
-            `
-              
-              `,
+            `UPDATE tb_users SET name = '${username}', email = '${email}', phone = '${phone}', password = '${password}',password = ${level},password = '${image}' WHERE id = ${id}`, (err, result) => {
             (err, res) => {
               if (err) {
                 reject(err)
