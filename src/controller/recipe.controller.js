@@ -1,4 +1,5 @@
 const recipeModel = require('../model/recipe.model')
+const {succes,failed, success} = require('../helper/response')
 const recipeController = {
   // method
   list: (req, res) => {
@@ -34,16 +35,28 @@ const recipeController = {
       })
   },
   insert: (req, res) => {
-    // eslint-disable-next-line camelcase
-    const {nama_recipe, ingredients,tanggal_dibuat,image } = req.body
-    recipeModel
-      .store( nama_recipe, ingredients,tanggal_dibuat,image)
-      .then((result) => {
-        res.json('Account added successfully')
-      })
-      .catch((err) => {
-        res.json(err)
-      })
+    try {
+      //image
+      const image = req.file.filename
+      //tangkap data dari body
+      const {nama_recipe, ingredients, tanggal_dibuat} = req.body;
+
+          const data = {
+              nama_recipe,
+              ingredients,
+              tanggal_dibuat,
+              image
+          }
+          recipeModel.insert(data).then((result) => {
+            success(res, result, 'success', 'upload recipe success')
+          }).catch((err) => {
+              failed(res, err.message, 'failed', 'upload recipe failed')
+          })
+  } catch(err){
+    failed(res, err.message, 'failed', 'internal server error');
+  
+  }
+     
   },
   update: (req, res) => {
     const id = req.params.id
