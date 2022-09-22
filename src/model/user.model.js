@@ -73,24 +73,16 @@ const userModel = {
       })
     })
   },  
-  updateAccount: (d,username, email,phone,password,level,image) => {
+  updateAccount: (id,username, email,phone,password,level,image) => {
     return new Promise((resolve, reject) => {
-      // UPDATE users SET
-        
-      //         image = COALESCE('${image}', image)
-      //         WHERE id = ${id}
-      // username = COALESCE('${username}', username),
-      // email = COALESCE('${email}', email),
-      // phone = COALESCE('${phone}', phone),
-      // password = COALESCE('${password}', password),
       db.query(
        ` UPDATE users SET
         username = COALESCE ($1, username),
         email = COALESCE ($2, email),
-        password = COALESCE ($3, password),
         phone = COALESCE ($4, phone),
+        password = COALESCE ($3, password),
         level = COALESCE ($5, level),
-        profile_pic = COALESCE ($6, image)
+        image = COALESCE ($6, image)  
         WHERE id = $7
         `,
         [username, email, password, phone, level, image, id],(err, res) => {
