@@ -51,10 +51,11 @@ const userController = {
   },
   update: (req, res) => {
     const id = req.params.id
+    const image=req.file.filename
     // eslint-disable-next-line camelcase
     const { username,email,phone,password,level } = req.body
     userModel
-      .updateAccount(id,username,email,phone,password,level)
+      .updateAccount(id,username,email,phone,password,level,image)
       .then((result) => {
         res.json('Account Updated')
       })
