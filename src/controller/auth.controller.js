@@ -32,30 +32,31 @@ module.exports={
             failed(res, err.message,'failed','internal server error')
             }
     },
-    login : (req,res)=>{
-      const {username, password}= req.body
-      userModel.checkUsername(username).then((result)=>{
-        // console.log(res);
-        const user = result.rows[0];
-        if (result.rowCount>0){
-          bcrypt.compare(password, result.rows[0].password).then(async(result)=>{
-            if(result){
-              const token = await jwtToken({
-                username : user.username,
-                level:user.level
+    login: async (req, res) => {
+      const {username, password} = req.body;
+      userModel.checkUsername(username).then((result) => {
+          // console.log(res.rows[0]);
+          const user = result.rows[0];
+          if(result.rowCount > 0) {
+              bcrypt.compare(password, result.rows[0].password).then(async (result) => {
+                  if(result) {
+                      const token = await jwtToken({
+                          username: user.username,
+                          level: user.level
+                      })
+                      console.log(token);
+                      succesWithToken(res, token, "success", "login success");
+                  } else {
+                      // ketika password salah
+                      failed(res, null, 'failed', 'username or password is wrong');
+                  }
               })
-              // console.log(token)
-              succesWithToken(res,token, 'succes', 'login succes');
-            } else {
-              failed(res,null,'failed','username atau password salah')
-            }
-          })
-        }else {
-          // ketika username salah
-          failed(res,null,'failed','username salah')
-        }
-      }).catch((err)=>{
-        failed(res,null,'failed','internal server salah')
+          } else {
+              //ketika username salah
+              failed(res, null, 'failed', 'username wrong');
+          }
+      }).catch((err) => {
+          failed(res, err, 'failed', 'internal server error');
       })
-    }
+  }
 }
