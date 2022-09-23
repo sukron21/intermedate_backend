@@ -1,82 +1,72 @@
 const recipeModel = require('../model/recipe.model')
-const {succes,failed, success} = require('../helper/response')
-const userModel = require('../model/user.model')
+const {success, failed} = require('../helper/response')
 const recipeController = {
-  // method
+  // metod
   list: (req, res) => {
-    recipeModel
-      .selectAll()
-      .then((result) => {
-        res.json(result)
-      })
-      .catch((err) => {
-        res.json(err)
+    recipeModel.selectAll()
+      .then((results) => {
+        success(res, results, 'success', 'get all user success')
+      }).catch((err) => {
+        failed(res, err.message, 'failed', 'get all user failed')
       })
   },
   detail: (req, res) => {
     const id = req.params.id
-    recipeModel
-      .selectDetail(id)
-      .then((result) => {
-        res.json(result)
-      })
-      .catch((err) => {
-        res.json(err)
-      })
-  },
-  detailname: (req, res) => {
-    const id = req.params.nama_recipe
-    recipeModel
-      .nameDetail(id)
-      .then((result) => {
-        res.json(result)
-      })
-      .catch((err) => {
-        res.json(err)
-      })
-  },
-  insert:(req, res)=>{
-try{
-  const{nama_recipe,ingredients,tanggal_dibuat}=req.body;
-  const image=req.file.filename
-    const data={
-      nama_recipe,
-      ingredients,
-      tanggal_dibuat,
-      image
-    }
-    console.log(data);
-    userModel.store(data).then((result)=>{
-      success(res,result, 'success','register succes')
-    }).catch((err)=>{
-      failed(res,err.message,'failed','register fail')
+    recipeModel.selectDetail(id).then((results) => {
+      res.json(results.rows)
+    }).catch((err) => {
+      res.json(err)
     })
+  },
+  insert: (req, res) => {
+    try {
+      //image
+      const image = req.file.filename
+      //tangkap data dari body
+      const {nama_recipe, ingredients} = req.body;
 
+          const data = {
+              nama_recipe,
+              ingredients,
+              image
+          }
 
-  }catch(err){
-    failed(res,err.message,'failed','internal server error')
+          recipeModel.store(data).then((result) => {
+              success(res, result, 'success', 'upload recipe success')
+
+          }).catch((err) => {
+              failed(res, err.message, 'failed', 'upload recipe failed')
+          })
+        } catch(err) {
+      failed(res, err.message, 'failed', 'internal server error');
   }
   },
   update: (req, res) => {
+    const { nama_recipe, ingredients} = req.body
     const id = req.params.id
-    // eslint-disable-next-line camelcase
-    const { nama_recipe, ingredients } = req.body
-    recipeModel
-      .updateAccount(id, nama_recipe, ingredients)
-      .then((result) => {
-        res.json('Account Updated')
-      })
-      .catch((err) => {
-        res.json(err)
-      })
+    const image = req.file.filename
+    recipeModel.updateAccount(id, nama_recipe, ingredients, image).then((results) => {
+      success(res, results, 'success', 'update recipe success')
+    }).catch((err) => {
+      failed(res, err.message, 'failed', 'update recipe failed')
+    })
   },
   destroy: (req, res) => {
+    const id = req.params.id;
     recipeModel
-      .delete(req.params.id)
+      .delete(id)
       .then((result) => {
-        res.json('Account Deleted')
+        success(res, result, 'success', 'success delete data');
       })
       .catch((err) => {
+        failed(res, err, 'failed', 'failed delete data');
+      });
+  },
+  detailTitle: (req, res) => {
+    const nama_recipe = req.params.nama_recipe
+    recipeModel.detailTitle(nama_recipe).then((results) => {
+        res.json(results.rows)
+      }).catch((err) => {
         res.json(err)
       })
   }
