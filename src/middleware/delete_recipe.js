@@ -1,12 +1,12 @@
 const fs = require("fs");
-const userModel = require("../model/recipe.model");
+const recipeModel = require("../model/recipe.model");
 
-const remove = async (req, res, next) => {
+const removeRecipe = async (req, res, next) => {
   const id = req.params.id;
-  const data = await userModel.selectDetail(id);
+  const data = await recipeModel.selectDetail(id);
   if (data.rows[0].image) {
-    const photo = data.rows[0].image;
-    fs.unlink(`./public_recipe/${photo}`, (err) => {
+    const image = data.rows[0].image;
+    fs.unlink(`./public_gambar/${image}`, (err) => {
       if (err) {
         console.log(err);
         next();
@@ -18,4 +18,4 @@ const remove = async (req, res, next) => {
   }
 };
 
-module.exports = remove;
+module.exports = removeRecipe;
