@@ -1,8 +1,8 @@
 // deklare exprees
 const express = require('express')
-const { list, destroy, detail, insert, update, detailname } = require('../controller/recipe.controller')
+const { list, destroy, detail, insert, update, detailTitle } = require('../controller/recipe.controller')
 const remove= require('../middleware/delete_recipe')
-const upload_recipe = require('../middleware/upload_recipe');
+const upload = require('../middleware/upload_recipe');
 
 const router = express.Router()
 
@@ -14,9 +14,11 @@ const router = express.Router()
 router
   .get('/recipes', list)
   .get('/recipes/:id', detail)
-  .get('/nama/:nama_recipe', detailname)
-  .post('/recipes/tambah',upload_recipe, insert)
-  .put('/recipes/:id',remove,insert, update)
-  .delete('/recipes/:id',remove, destroy)
+  .get('/nama/:nama_recipe', detailTitle)
+  .post('/recipes/tambah',upload, insert)
+  .put('/recipes/:id',remove,upload,update)
+  .delete('/recipes/:id',remove,destroy)
+  .delete('/recipes1/:id', destroy)
+  
 
 module.exports = router
