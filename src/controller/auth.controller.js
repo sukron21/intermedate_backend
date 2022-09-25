@@ -33,15 +33,15 @@ module.exports={
             }
     },
     login: async (req, res) => {
-      const {username, password} = req.body;
-      userModel.checkUsername(username).then((result) => {
+      const {email, password} = req.body;
+      userModel.checkUEmail(email).then((result) => {
           // console.log(res.rows[0]);
           const user = result.rows[0];
           if(result.rowCount > 0) {
               bcrypt.compare(password, result.rows[0].password).then(async (result) => {
                   if(result) {
                       const token = await jwtToken({
-                          username: user.username,
+                        email: user.email,
                           level: user.level
                       })
                       console.log(token);
